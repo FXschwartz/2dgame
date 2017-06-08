@@ -1,10 +1,10 @@
 'use strict';
 
 class Enemy extends Phaser.Sprite {
-	constructor(game) {
+	constructor(game, x,y) {
 		console.log(game.world.height);
-		super(game, 500, game.world.height-250, 'baddie');
-		game.add.existing(this);
+		super(game, x, y, 'baddie');
+		// game.add.existing(this);
 
 		game.physics.arcade.enable(this);
 
@@ -24,6 +24,7 @@ class Enemy extends Phaser.Sprite {
 		var player = world.player;
 		var enemy = this;
 
+		game.physics.arcade.collide(world.enemies);
 		game.physics.arcade.collide(enemy, world.platforms);
 		game.physics.arcade.collide(player, enemy, player.onHit);
 
@@ -31,12 +32,17 @@ class Enemy extends Phaser.Sprite {
 		if(enemy.body.blocked.right) enemy.animations.play('left');
 
 		if(enemy.body.touching.down) {
-			if(enemy.body.x-player.body.x>=200) enemy.animations.play('left');
-			if(enemy.body.x-player.body.x<=-200) enemy.animations.play('right');
+			if(enemy.body.x-player.body.x>=100) enemy.animations.play('left');
+			if(enemy.body.x-player.body.x<=-100) enemy.animations.play('right');
+
 		}
 
-		if(enemy.animations.currentAnim.name==='left') enemy.body.velocity.x = -enemy.speed;
-		if(enemy.animations.currentAnim.name==='right') enemy.body.velocity.x = enemy.speed;
+		if(enemy.animations.currentAnim.name==='left') {
+			if(enemy.body.velocity.x>-enemy.speed) enemy.body.velocity.x-=5;
+		}
+		if(enemy.animations.currentAnim.name==='right') {
+			if(enemy.body.velocity.x<enemy.speed) enemy.body.velocity.x+=5;
+		}
 
 	}
 

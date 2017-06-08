@@ -2,24 +2,22 @@
 
 class Player extends Phaser.Sprite {
 	constructor(game) {
-		console.log(game.world.height);
 		super(game, 32, game.world.height-250, 'dude');
 		game.add.existing(this);
 
 		game.camera.follow(this);
-
-		//  We need to enable physics on the player
 		game.physics.arcade.enable(this);
 
-		//  Player physics properties. Give the little guy a slight bounce.
-		this.body.bounce.y = 0.1;
+		this.health = 3;
+		this.maxHealth = 3;
+
+		this.body.bounce.y = 0.2;
 		this.body.gravity.y = 1000;
 		this.body.collideWorldBounds = true;
 
-		//  Our two animations, walking left and right.
 		this.animations.add('left', [0, 1, 2, 3], 10, true);
 		this.animations.add('right', [5, 6, 7, 8], 10, true);
-		this.scale.setTo(1,1.5);
+		this.scale.setTo(1,1);
 
 		this.cursors = game.input.keyboard.createCursorKeys();
 	}
@@ -58,7 +56,7 @@ class Player extends Phaser.Sprite {
 
 		//  Allow the player to jump if they are touching the ground.
 		if(cursors.up.isDown && player.body.touching.down) {
-			player.body.velocity.y = Math.max(Math.abs(player.body.velocity.x), 300) * -1.5;
+			player.body.velocity.y = Math.min(Math.max(Math.abs(player.body.velocity.x), 300), 600) * -1.8;
 		}
 	}
 
@@ -67,7 +65,7 @@ class Player extends Phaser.Sprite {
 		if(player.body.touching.right) player.body.velocity.x = -1000;
 		if(player.body.touching.left) player.body.velocity.x = 1000;
 		if(player.body.touching.down) {
-			player.body.velocity.y = -250;
+			player.body.velocity.y = -400;
 			enemy.kill();
 		}
 	}

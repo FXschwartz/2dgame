@@ -24,7 +24,12 @@ class PlayState extends Phaser.State {
 		this.game.myWorld = new World(this.game);
 		this.game.myWorld.player = new Player(this.game);
 
-		this.game.myWorld.enemy = new Enemy(this.game);
+
+		this.game.myWorld.enemies = this.game.add.group();
+		for(var i=0;i<4;i++) {
+			var enemy = new Enemy(this.game, 500+i*100, this.game.world.height-200);
+			this.game.myWorld.enemies.add(enemy);
+		}
 	}
 
 }
