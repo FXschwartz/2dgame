@@ -2,7 +2,7 @@
 
 class Player extends Phaser.Sprite {
 	constructor(game) {
-		super(game, 32, game.world.height-250, 'dude');
+		super(game, 32, game.world.height-250, 'player');
 		game.add.existing(this);
 
 		game.camera.follow(this);
@@ -20,6 +20,27 @@ class Player extends Phaser.Sprite {
 		this.scale.setTo(1,1);
 
 		this.cursors = game.input.keyboard.createCursorKeys();
+
+		this.healthSprite = game.add.sprite(0,0, 'health');
+
+		this.healthGroup = game.add.group();
+		for(var i=0;i<this.maxHealth;i++) {
+			var sprite = this.healthGroup.create(i*64,0, 'health');
+			sprite.fixedToCamera = true;
+			sprite.frame = 3;
+		}
+	}
+
+	updateHealth() {
+		for(var i=0;i<this.maxHealth;i++) {
+			var sprite = this.healthGroup.getAt(i);
+			sprite.frame = 5;
+		}
+		for(var i=0;i<this.health;i++) {
+			var sprite = this.healthGroup.getAt(i);
+			sprite.frame = 3;
+		}
+		if(this.health<=0) this.kill();
 	}
 
 	update() {
@@ -63,10 +84,12 @@ class Player extends Phaser.Sprite {
 	onHit(player,enemy) {
 		// console.log('Player.onHit: enemy=%o', enemy);
 		if(player.body.touching.right) player.body.velocity.x = -1000;
-		if(player.body.touching.left) player.body.velocity.x = 1000;
-		if(player.body.touching.down) {
-			player.body.velocity.y = -400;
-			enemy.kill();
-		}
+		if(player.body.touching.left)  player.body.velocity.x = 1000;
+		if(player.body.touching.down) player.body.velocity.y = -400;
+		player.health--;
+		player.updateHealth();
+		player.alpha = 0;
+		game.add.tween(player).to({alpha:1}, 400, null, true, 0, 2, false);
+
 	}
 }

@@ -12,7 +12,8 @@ class PlayState extends Phaser.State {
 		this.game.load.image('ground', 'assets/platform.png');
 		this.game.load.image('star', 'assets/star.png');
 		this.game.load.image('brick', 'assets/brick.png');
-		this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+		this.game.load.spritesheet('player', 'assets/dude.png', 32, 48);
+		this.game.load.spritesheet('health', 'assets/health.png', 64,64);
 		this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
 	}
 
