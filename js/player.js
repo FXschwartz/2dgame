@@ -21,26 +21,24 @@ class Player extends Phaser.Sprite {
 
 		this.cursors = game.input.keyboard.createCursorKeys();
 
-		this.healthSprite = game.add.sprite(0,0, 'health');
 
+		this.healthSprite = game.add.sprite(0,0, 'health');
 		this.healthGroup = game.add.group();
 		for(var i=0;i<this.maxHealth;i++) {
 			var sprite = this.healthGroup.create(i*64,0, 'health');
 			sprite.fixedToCamera = true;
 			sprite.frame = 3;
 		}
-	}
 
-	updateHealth() {
-		for(var i=0;i<this.maxHealth;i++) {
-			var sprite = this.healthGroup.getAt(i);
-			sprite.frame = 5;
-		}
-		for(var i=0;i<this.health;i++) {
-			var sprite = this.healthGroup.getAt(i);
-			sprite.frame = 3;
-		}
-		if(this.health<=0) this.kill();
+		this.fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		this.bulletGroup = game.add.group();
+		this.bulletGroup.enableBody = true;
+		this.bulletGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		this.bulletGroup.createMultiple(30, 'bullet');
+		this.bulletGroup.setAll('anchor.x', 0);
+		this.bulletGroup.setAll('anchor.y', 0.5);
+		this.bulletGroup.setAll('outOfBoundsKill', true);
+		this.bulletGroup.setAll('checkWorldBounds', true);
 	}
 
 	update() {
@@ -77,7 +75,11 @@ class Player extends Phaser.Sprite {
 
 		//  Allow the player to jump if they are touching the ground.
 		if(cursors.up.isDown && player.body.touching.down) {
-			player.body.velocity.y = Math.min(Math.max(Math.abs(player.body.velocity.x), 300), 600) * -1.8;
+			player.body.velocity.y = Math.min(Math.max(Math.abs(player.body.velocity.x)*2, 500), 700) * -1;
+		}
+
+		if(this.fireButton.isDown) {
+			this.fireBullet();
 		}
 	}
 
@@ -91,5 +93,28 @@ class Player extends Phaser.Sprite {
 		player.alpha = 0;
 		game.add.tween(player).to({alpha:1}, 400, null, true, 0, 2, false);
 
+	}
+
+	updateHealth() {
+		for(var i=0;i<this.maxHealth;i++) {
+			var sprite = this.healthGroup.getAt(i);
+			sprite.frame = 5;
+		}
+		for(var i=0;i<this.health;i++) {
+			var sprite = this.healthGroup.getAt(i);
+			sprite.frame = 3;
+		}
+		if(this.health<=0) this.kill();
+	}
+
+	fireBullet() {
+		if(this.game.time.now<this.bulletTime) return;
+		this.bulletTime = this.game.time.now + 500;
+		var bullet = this.bulletGroup.getFirstExists(false);
+		if(!bullet) return;
+		var dir = this.animations.currentAnim.name==='right' ? 1 : -1;
+		bullet.reset(this.x+16 + 16*dir, this.y + 32);
+		bullet.scale.x = dir;
+		bullet.body.velocity.x = 800 * dir;
 	}
 }

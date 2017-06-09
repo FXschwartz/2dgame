@@ -2,9 +2,7 @@
 
 class Enemy extends Phaser.Sprite {
 	constructor(game, x,y) {
-		console.log(game.world.height);
 		super(game, x, y, 'baddie');
-		// game.add.existing(this);
 
 		game.physics.arcade.enable(this);
 
@@ -15,7 +13,7 @@ class Enemy extends Phaser.Sprite {
 		this.animations.add('left', [0,1], 10, true);
 		this.animations.add('right', [2,3], 10, true);
 
-		this.speed = 200;
+		this.speed = game.rnd.integerInRange(100,300);
 	}
 
 	update() {
@@ -27,13 +25,19 @@ class Enemy extends Phaser.Sprite {
 		game.physics.arcade.collide(world.enemies);
 		game.physics.arcade.collide(enemy, world.platforms);
 		game.physics.arcade.collide(player, enemy, player.onHit);
+		game.physics.arcade.collide(player.bulletGroup, enemy, this.onHit);
 
 		if(enemy.body.blocked.left) enemy.animations.play('right');
 		if(enemy.body.blocked.right) enemy.animations.play('left');
 
 		if(enemy.body.touching.down) {
-			if(enemy.body.x-player.body.x>=100) enemy.animations.play('left');
-			if(enemy.body.x-player.body.x<=-100) enemy.animations.play('right');
+			if(enemy.body.x-player.body.x>=150) enemy.animations.play('left');
+			if(enemy.body.x-player.body.x<=-150) enemy.animations.play('right');
+
+			if(!game.rnd.integerInRange(0,20)) {
+				var deltaY = player.body.y-enemy.body.y;
+				if(deltaY<-10) enemy.body.velocity.y = (2+game.rnd.frac()) * deltaY;
+			}
 
 		}
 
@@ -44,6 +48,11 @@ class Enemy extends Phaser.Sprite {
 			if(enemy.body.velocity.x<enemy.speed) enemy.body.velocity.x+=5;
 		}
 
+	}
+
+	onHit(enemy,bullet) {
+		enemy.kill();
+		bullet.kill();
 	}
 
 }
