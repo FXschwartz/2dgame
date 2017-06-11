@@ -11,8 +11,8 @@ class Player extends Phaser.Sprite {
 		this.health = 3;
 		this.maxHealth = 3;
 
-		this.body.bounce.y = 0.2;
-		this.body.gravity.y = 1000;
+		this.body.bounce.y = 0.1;
+		this.body.gravity.y = 2000;
 		this.body.collideWorldBounds = true;
 
 		this.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -30,24 +30,23 @@ class Player extends Phaser.Sprite {
 			sprite.frame = 3;
 		}
 
-		this.fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-		this.bulletGroup = game.add.group();
-		this.bulletGroup.enableBody = true;
-		this.bulletGroup.physicsBodyType = Phaser.Physics.ARCADE;
-		this.bulletGroup.createMultiple(30, 'bullet');
-		this.bulletGroup.setAll('anchor.x', 0);
-		this.bulletGroup.setAll('anchor.y', 0.5);
-		this.bulletGroup.setAll('outOfBoundsKill', true);
-		this.bulletGroup.setAll('checkWorldBounds', true);
+		// this.fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		// this.bulletGroup = game.add.group();
+		// this.bulletGroup.enableBody = true;
+		// this.bulletGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		// this.bulletGroup.createMultiple(30, 'bullet');
+		// this.bulletGroup.setAll('anchor.x', 0);
+		// this.bulletGroup.setAll('anchor.y', 0.5);
+		// this.bulletGroup.setAll('outOfBoundsKill', true);
+		// this.bulletGroup.setAll('checkWorldBounds', true);
 	}
 
 	update() {
 		var game = this.game;
 		var player = this;
-		var platforms = game.myWorld.platforms;
 		var cursors = this.cursors;
 
-		game.physics.arcade.collide(player, platforms);
+		game.physics.arcade.collide(player, game.level.groundLayer);
 
 		var maxSpeed = 400;
 		var speedInc = 20;
@@ -74,13 +73,18 @@ class Player extends Phaser.Sprite {
 		}
 
 		//  Allow the player to jump if they are touching the ground.
-		if(cursors.up.isDown && player.body.touching.down) {
-			player.body.velocity.y = Math.min(Math.max(Math.abs(player.body.velocity.x)*2, 500), 700) * -1;
+		if(cursors.up.isDown && player.body.blocked.down) {
+			player.body.velocity.y = -1 * (500 + Math.abs(player.body.velocity.x)/3);
 		}
 
-		if(this.fireButton.isDown) {
-			this.fireBullet();
-		}
+		// if(this.fireButton.isDown) {
+		// 	this.fireBullet();
+		// }
+
+	}
+
+	render() {
+		this.game.debug.bodyInfo(this, 32, 32);
 	}
 
 	onHit(player,enemy) {
