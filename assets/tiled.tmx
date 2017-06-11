@@ -4,6 +4,9 @@
   <image source="tiles_spritesheet.png" width="914" height="936"/>
  </tileset>
  <layer name="GroundLayer" width="20" height="10">
+  <properties>
+   <property name="collides" value="true"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -17,7 +20,7 @@
 153,153,153,153,0,117,104,104,104,93,0,153,153,153,153,153,153,153,153,153
 </data>
  </layer>
- <layer name="BackgroundLayer" width="20" height="10">
+ <layer name="BackgroundLayer" width="20" height="10" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
