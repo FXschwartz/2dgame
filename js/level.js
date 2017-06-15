@@ -3,7 +3,7 @@ class Level {
 		this.game = game;
 
 		this.map = this.game.add.tilemap(tilemap);
-		this.map.addTilesetImage('tiles_spritesheet', 'tiles_spritesheet');
+		this.map.addTilesetImage('tiles', 'tiles');
 
 		this.game.stage.backgroundColor = "#a9f0ff";
 

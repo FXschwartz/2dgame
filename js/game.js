@@ -12,7 +12,7 @@ class Game extends Phaser.Game {
 
 class PlayState extends Phaser.State {
 	preload() {
-		this.game.add.plugin(Phaser.Plugin.Debug);
+		// this.game.add.plugin(Phaser.Plugin.Debug);
 
 		// this.game.load.image('sky', 'assets/sky.png');
 		// this.game.load.image('ground', 'assets/platform.png');
@@ -24,7 +24,7 @@ class PlayState extends Phaser.State {
 		// this.game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
 
 		this.game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
-		this.game.load.image('tiles_spritesheet', 'assets/tiles_spritesheet.png');
+		this.game.load.image('tiles', 'assets/tiles_spritesheet_sm.png');
 	}
 
 	create() {

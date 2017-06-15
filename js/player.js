@@ -74,7 +74,7 @@ class Player extends Phaser.Sprite {
 
 		//  Allow the player to jump if they are touching the ground.
 		if(cursors.up.isDown && player.body.blocked.down) {
-			player.body.velocity.y = -1 * (500 + Math.abs(player.body.velocity.x)/3);
+			player.body.velocity.y = -1 * (600 + Math.abs(player.body.velocity.x)/3);
 		}
 
 		// if(this.fireButton.isDown) {
